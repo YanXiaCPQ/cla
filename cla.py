@@ -37,6 +37,7 @@ def dowmload(begin, end):
 def processAndSave(begin, end):
     cla = dict()
     for i in range(begin, end):
+        year = dict()
         with open(Path('.').resolve().joinpath('./rowdata/{}.txt'.format(str(i))), 'r') as f:
             tmp = f.readlines()
             header_date = tmp[2]
@@ -70,10 +71,18 @@ def processAndSave(begin, end):
             else:
                 tmp[1]= tmp[1] + '初一日'
                 try:
-                    month = Month_list[Month_list.index(month)]
+                    if month.find("十二") > -1:
+                        month = Month_list[Month_list.index('正月')]
+                    else:
+                        month = Month_list[Month_list.index(month)+1]
                 except:
-                    month = Month_list[Month_list2.index(month)]
-            cla[tmp[0]] = tmp[1]
+                    if month.find("十二") > -1:
+                        month = Month_list[Month_list.index('正月')]
+                    else:
+                        month = Month_list[Month_list2.index(month)+1]
+            year[tmp[0]] = tmp[1]
+
+        cla[str(i)] = year
     
     with open(Path('.').resolve().joinpath('./data.dict'), 'w') as f:
         f.write(str(cla))
@@ -83,4 +92,3 @@ begin = 2020
 end = 2101
 #dowmload(begin,end)
 processAndSave(begin,end)
-
