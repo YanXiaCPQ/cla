@@ -44,11 +44,17 @@ def checkdate():
     tomorrow = (datetime.now() + timedelta(days=1)).strftime("%m月%d日")
     dyear = dClaData[year]
     
+
     for type_cla, value in dbirthday.items():
         for name, birthday in value.items():
             if type_cla == _SOLAR_:
+                if len(birthday) == 4:
+                    birthday = '0' + birthday[:2] + '0' + birthday[-2:]
                 if len(birthday) == 5:
-                    birthday = '0'+birthday
+                    if birthday[1] not in ('0','1','2'):
+                        birthday = '0' + birthday
+                    else :
+                        birthday = birthday[:3] + '0' + birthday[-2:]
                 if birthday == today:
                     notice(name + '今天新历生日啦 ==>' + birthday)
                 elif birthday == tomorrow:
@@ -57,9 +63,13 @@ def checkdate():
                 record_birthday = birthday
                 tmpdyear = {v : k for k, v in dyear.items()}
                 birthday = tmpdyear[birthday][5:]
-                print(birthday)
+                if len(birthday) == 4:
+                    birthday = '0' + birthday[:2] + '0' + birthday[-2:]
                 if len(birthday) == 5:
-                    birthday = '0' + birthday                
+                    if birthday[1] not in ('0','1','2'):
+                        birthday = '0' + birthday
+                    else :
+                        birthday = birthday[:3] + '0' + birthday[-2:]
                 if birthday == today:
                     notice(name + '今天阴历生日啦 ' + record_birthday)
                 elif birthday == tomorrow:
